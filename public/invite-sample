@@ -1,0 +1,296 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="telephone=no" name="format-detection">
+    <title></title>
+    <!--[if (mso 16)]>
+    <style type="text/css">
+    a {text-decoration: none;}
+    </style>
+    <![endif]-->
+    <!--[if gte mso 9]><style>sup { font-size: 100% !important; }</style><![endif]-->
+    <!--[if mso]><xml>
+    <w:WordDocument xmlns:w="urn:schemas-microsoft-com:office:word">
+      <w:DontUseAdvancedTypographyReadingMail></w:DontUseAdvancedTypographyReadingMail>
+    </w:WordDocument>
+    </xml><![endif]-->
+</head>
+
+<body data-new-gr-c-s-loaded="14.1073.0">
+    <div class="es-wrapper-color">
+        <!--[if gte mso 9]>
+			<v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
+				<v:fill type="tile" color="#f6f6f6"></v:fill>
+			</v:background>
+		<![endif]-->
+        <table class="es-wrapper" width="100%" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td class="esd-email-paddings" valign="top">
+                        <table cellpadding="0" cellspacing="0" class="esd-header-popover es-header" align="center">
+                            <tbody>
+                                <tr>
+                                    <td class="esd-stripe" align="center">
+                                        <table bgcolor="#ffffff" class="es-header-body" align="center" cellpadding="0" cellspacing="0" width="640">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="esd-structure" align="left">
+                                                        <table width="100%" cellspacing="0" cellpadding="0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td class="esd-container-frame" width="640" valign="top" align="center">
+                                                                        <table width="100%" cellspacing="0" cellpadding="0">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td align="center" class="esd-block-image" style="font-size: 0px;"><a target="_blank"><img class="adapt-img" src="https://d1dfj7lgpmkoom.cloudfront.net/5cba68660b014dd38d22a52eabca5248/lib/pluginId_5cba68660b014dd38d22a52eabca5248_44d55159-aa0a-4c8f-986f-4462060b575a/alb24007_afl_finals_inviteheader_1.jpg" alt style="display: block;" width="640"></a></td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="esd-structure es-p40t es-p25b es-p20r es-p20l" align="left" bgcolor="#010101" style="background-color: #010101;">
+                                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td width="600" class="esd-container-frame" align="center" valign="top">
+                                                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td align="center" class="esd-block-text">
+                                                                                        <p style="font-size: 30px; color: #ffffff;"><strong>Dear {{guest_block}}</strong></p>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="es-content esd-footer-popover" cellspacing="0" cellpadding="0" align="center">
+                            <tbody>
+                                <tr>
+                                    <td class="esd-stripe" align="center">
+                                        <table class="es-content-body" width="640" cellspacing="0" cellpadding="0" bgcolor="#ac182b" align="center" style="background-color: #ac182b;">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="esd-structure es-p20t es-p20b es-p30r es-p30l" align="left" bgcolor="#010101" style="background-color: #010101;">
+                                                        <table width="100%" cellspacing="0" cellpadding="0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td class="esd-container-frame" width="580" valign="top" align="center">
+                                                                        <table width="100%" cellspacing="0" cellpadding="0">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td align="center" class="esd-block-text">
+                                                                                        <p style="color: #ffffff; font-size: 22px; line-height: 150%;"><strong>John Kelly and</strong><b> the Asahi Group</b><br><strong>are delighted to invite you to the</strong></p>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="esd-structure es-p20" align="left" bgcolor="#010101" style="background-color: #010101;">
+                                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td width="600" class="esd-container-frame" align="center" valign="top">
+                                                                        <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ac182b" style="background-color: #ac182b;">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td align="center" class="esd-block-text" bgcolor="#010101">
+                                                                                        <p style="color: #ffffff; font-size: 30px;"><strong>2024 Toyota AFL Grand Final</strong></p>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="esd-structure es-p20" align="left" bgcolor="#010101" style="background-color: #010101;">
+                                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td width="600" class="esd-container-frame" align="center" valign="top">
+                                                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td align="center" class="esd-block-text">
+                                                                                        <p style="color: #ffffff;"><span style="font-size:18px;"><u><strong>Date</strong></u></span><br><span style="font-size:16px;">Saturday, 28th September 2024</span></p>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="esd-structure es-p20" align="left" bgcolor="#010101" style="background-color: #010101;">
+                                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td width="600" class="esd-container-frame" align="center" valign="top">
+                                                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td align="center" class="esd-block-text">
+                                                                                        <p style="color: #ffffff; line-height: 150%; font-size: 16px;"><span style="font-size: 18px; line-height: 150%;"><u><strong>Key Event Timings</strong></u></span><br><b>CUB Corporate Suite</b><br>Access to suite from 12:00 pm<br>Service Commences:&nbsp;&nbsp;12.30 pm<br>2024 Toyota AFL Grand Final: 2.30 pm<br><em>*Times may change</em></p>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="esd-structure es-p20" align="left" bgcolor="#010101" style="background-color: #010101;">
+                                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td width="600" class="esd-container-frame" align="center" valign="top">
+                                                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td align="center" class="esd-block-text">
+                                                                                        <p style="color: #ffffff; font-size: 18px;"><u><strong>Where</strong></u></p>
+                                                                                        <p style="font-size: 16px; color: #ffffff;"><strong>Corporate Suite 3-37</strong><br>Melbourne Cricket Ground</p>
+                                                                                        <p style="font-size: 16px; color: #ffffff;">Gate 6, Level 3</p>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="esd-structure es-p20" align="left" bgcolor="#010101" style="background-color: #010101;">
+                                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td width="600" class="esd-container-frame" align="center" valign="top">
+                                                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td align="center" class="esd-block-text">
+                                                                                        <p style="color: #ffffff; font-size: 16px;"><u><strong><span style="font-size:18px;">Dress Code</span></strong></u><br>Smart casual</p>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="esd-structure es-p20" align="left" bgcolor="#010101" style="background-color: #010101;">
+                                                        <table width="100%" cellspacing="0" cellpadding="0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td class="esd-container-frame" width="600" valign="top" align="center">
+                                                                        <table width="100%" cellspacing="0" cellpadding="0">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td align="center" class="esd-block-text">
+                                                                                        <p style="color: #ffffff; font-size: 15px;"><strong>RSVP is essential by&nbsp;</strong>{{rsvp_by_date | date: "%A, %e %B %Y"}}<strong></strong><br>Attendance is by invitation only, strictly for 18+ and non-transferable</p>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="esd-structure es-p30t es-p25b es-p20r es-p20l" align="left" bgcolor="#010101" style="background-color: #010101;">
+                                                        <table width="100%" cellspacing="0" cellpadding="0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td class="esd-container-frame" width="600" valign="top" align="center">
+                                                                        <table width="100%" cellspacing="0" cellpadding="0">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td align="center" class="esd-block-text" esd-links-underline="none" esd-links-color="#ffffff">
+                                                                                        <p style="color: #ffffff; font-size: 15px;">If you have any questions, please contact</p>
+                                                                                        <p style="color: #ffffff;"><a href="mailto:%7B%7Brequester.email%7D%7D" target="_blank" style="color: #ffffff;text-decoration:none;">{{requester.email}}</a></p>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="esd-structure es-p20t es-p40b es-p20r es-p20l" align="left" bgcolor="#010101" style="background-color: #010101;">
+                                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td width="600" class="esd-container-frame" align="center" valign="top">
+                                                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td align="center" class="esd-block-button"><span class="es-button-border" style="border-color: #f10721; border-width: 10px 20px; background: #f10721;"><a href="{{rsvp_yes_no_link}}" class="es-button es-button-1724640757800" target="_blank" style="background: #f10721; padding: 10px 20px; font-family: verdana, geneva, sans-serif; font-size: 20px; font-weight: bold; mso-border-alt: 10px solid #f10721">CLICK HERE TO RSVP</a></span></td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
