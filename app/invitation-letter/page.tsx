@@ -69,36 +69,6 @@ export default function FlipCard() {
       setTimeout(() => {
         handleLetterFly();
       }, 1500);
-    } else {
-      setIsFlipping(true);
-
-      if (flapGroupRef.current) {
-        flapGroupRef.current.scaleY(1);
-        flapGroupRef.current.y(0);
-      }
-      setIsFlapOpen(false);
-
-      const flipOut = new Konva.Tween({
-        node: groupRef.current,
-        scaleX: 0,
-        duration: 0.5,
-        easing: Konva.Easings.EaseInOut,
-        onFinish: () => {
-          setIsFront(true);
-          const flipIn = new Konva.Tween({
-            node: groupRef.current!,
-            scaleX: 1,
-            duration: 0.5,
-            easing: Konva.Easings.EaseInOut,
-            onFinish: () => {
-              setIsFlipping(false);
-            },
-          });
-          flipIn.play();
-        },
-      });
-
-      flipOut.play();
     }
   };
 
