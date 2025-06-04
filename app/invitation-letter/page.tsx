@@ -13,10 +13,11 @@ import {
   Circle,
 } from "react-konva";
 import Konva from "konva";
+import LetterCanvas from "../components/LetterCanvas";
 
 const CARD_WIDTH = 800;
 const CARD_HEIGHT = 500;
-const LETTER_HEIGHT = 320;
+const LETTER_HEIGHT = 400;
 
 export default function FlipCard() {
   const groupRef = useRef<Konva.Group>(null);
@@ -25,6 +26,9 @@ export default function FlipCard() {
   const flapRightRef = useRef<Konva.Shape>(null);
   const flapBottomRef = useRef<Konva.Shape>(null);
   const letterRef = useRef<Konva.Group>(null);
+  const backRef = useRef<Konva.Rect>(null);
+  const flapOverlayRef = useRef<Konva.Shape>(null);
+  const flapGroupRef = useRef<Konva.Group>(null);
   const [isFront, setIsFront] = useState(true);
   const [isFlipping, setIsFlipping] = useState(false);
   const [isFlapOpen, setIsFlapOpen] = useState(false);
@@ -68,9 +72,9 @@ export default function FlipCard() {
     } else {
       setIsFlipping(true);
 
-      if (flapRef.current) {
-        flapRef.current.scaleY(1);
-        flapRef.current.y(0);
+      if (flapGroupRef.current) {
+        flapGroupRef.current.scaleY(1);
+        flapGroupRef.current.y(0);
       }
       setIsFlapOpen(false);
 
@@ -81,7 +85,6 @@ export default function FlipCard() {
         easing: Konva.Easings.EaseInOut,
         onFinish: () => {
           setIsFront(true);
-
           const flipIn = new Konva.Tween({
             node: groupRef.current!,
             scaleX: 1,
@@ -106,7 +109,7 @@ export default function FlipCard() {
 
     // Open flap to see the letter
     const openFlap = new Konva.Tween({
-      node: flapRef.current,
+      node: flapGroupRef.current!,
       scaleY: -1,
       y: CARD_HEIGHT * 0,
       duration: 0.8,
@@ -138,7 +141,8 @@ export default function FlipCard() {
 
   const handleLetterFly = () => {
     if (!letterRef.current || !groupRef.current) return;
-    flapRef.current?.moveToBottom();
+    flapGroupRef.current?.moveToBottom();
+
     const letter = letterRef.current;
     const envelope = groupRef.current;
     const originalY = letter.y();
@@ -153,6 +157,7 @@ export default function FlipCard() {
       duration: 0.8,
       easing: Konva.Easings.EaseInOut,
       onFinish: () => {
+        letter.moveToTop();
         const rotateAnimation = new Konva.Tween({
           node: letter,
           rotation: 90,
@@ -169,8 +174,8 @@ export default function FlipCard() {
                   node: letter,
                   scaleX: 0.9,
                   scaleY: 0.9,
-                  x: letterOriginalX + 300,
-                  y: finalY - 100,
+                  x: letterOriginalX + 500,
+                  y: finalY,
                   duration: 0.6,
                   easing: Konva.Easings.EaseInOut,
                 });
@@ -188,7 +193,7 @@ export default function FlipCard() {
                 scaleDownEnvelope.play();
               },
             });
-            letter.moveToTop();
+            // letter.moveToTop();
             flyDown.play();
           },
         });
@@ -222,6 +227,24 @@ export default function FlipCard() {
             shadowBlur={15}
             shadowOffsetY={5}
             shadowOpacity={0.2}
+          />
+
+          <Rect
+            width={CARD_WIDTH}
+            height={CARD_HEIGHT}
+            fillLinearGradientStartPoint={{ x: 0, y: 0 }}
+            fillLinearGradientEndPoint={{ x: CARD_WIDTH, y: CARD_HEIGHT }}
+            fillLinearGradientColorStops={[
+              0,
+              "rgba(255, 255, 255, 0.4)",
+              1,
+              "rgba(240, 240, 240, 0.1)",
+            ]}
+            cornerRadius={8}
+            shadowColor="black"
+            shadowBlur={20}
+            shadowOffsetY={8}
+            shadowOpacity={0.1}
           />
 
           {isFront ? (
@@ -280,12 +303,12 @@ export default function FlipCard() {
                 />
               </Group>
 
-              {/* Wedding Invitation */}
+              {/* Invitation */}
               <Text
-                text="Wedding Invitation"
+                text="Hello Scott Hyde"
                 fontSize={32}
                 fontFamily="'Times New Roman', serif"
-                fill="#f7ecd5" /* Match letter color for consistency */
+                fill="#f7ecd5"
                 width={CARD_WIDTH}
                 height={CARD_HEIGHT}
                 align="center"
@@ -296,6 +319,7 @@ export default function FlipCard() {
             <>
               {/* Back of envelope */}
               <Rect
+                ref={backRef as React.RefObject<Konva.Rect>}
                 width={CARD_WIDTH}
                 height={CARD_HEIGHT}
                 fill="#121212"
@@ -306,11 +330,11 @@ export default function FlipCard() {
               <Group
                 ref={letterRef as React.RefObject<Konva.Group>}
                 x={CARD_WIDTH / 2}
-                y={CARD_HEIGHT / 2.5}
+                y={CARD_HEIGHT / 2.3}
                 offsetX={CARD_WIDTH / 2 - 20}
                 offsetY={LETTER_HEIGHT / 2}
               >
-                <Rect
+                {/* <Rect
                   width={CARD_WIDTH - 40}
                   height={LETTER_HEIGHT}
                   fill="#f7ecd5"
@@ -319,9 +343,9 @@ export default function FlipCard() {
                   shadowBlur={5}
                   shadowOffsetY={2}
                   shadowOpacity={0.2}
-                />
+                /> */}
 
-                <Group
+                {/* <Group
                   x={(CARD_WIDTH - 40) / 2}
                   y={LETTER_HEIGHT / 2}
                   rotation={-90}
@@ -395,6 +419,19 @@ export default function FlipCard() {
                     y={230}
                     x={20}
                   />
+                </Group> */}
+                <Group
+                  x={(CARD_WIDTH - 40) / 4}
+                  y={LETTER_HEIGHT / 4}
+                  rotation={-90}
+                  offsetX={(CARD_WIDTH - 40) / 2}
+                  offsetY={LETTER_HEIGHT / 2}
+                >
+                  <LetterCanvas
+                    width={LETTER_HEIGHT + 90}
+                    height={CARD_WIDTH - 50}
+                    scale={0.45}
+                  />
                 </Group>
               </Group>
 
@@ -439,6 +476,40 @@ export default function FlipCard() {
                 fill="#121212"
                 stroke="#333333"
                 strokeWidth={1}
+              />
+              <Shape
+                sceneFunc={(ctx, shape) => {
+                  const r = 8;
+                  ctx.beginPath();
+                  ctx.moveTo(r, CARD_HEIGHT);
+                  ctx.quadraticCurveTo(0, CARD_HEIGHT, 0, CARD_HEIGHT - r);
+                  ctx.lineTo(0, r);
+                  ctx.quadraticCurveTo(0, 0, r, 0);
+                  ctx.lineTo(CARD_WIDTH / 2 - r, CARD_HEIGHT / 2 - r);
+                  ctx.quadraticCurveTo(
+                    CARD_WIDTH / 2,
+                    CARD_HEIGHT / 2,
+                    CARD_WIDTH / 2,
+                    CARD_HEIGHT / 2 + r
+                  );
+                  ctx.lineTo(r, CARD_HEIGHT - r);
+                  ctx.quadraticCurveTo(0, CARD_HEIGHT - r, r, CARD_HEIGHT);
+                  ctx.closePath();
+                  ctx.fillStrokeShape(shape);
+                }}
+                fillLinearGradientStartPoint={{ x: 0, y: 0 }}
+                fillLinearGradientEndPoint={{ x: CARD_WIDTH, y: CARD_HEIGHT }}
+                fillLinearGradientColorStops={[
+                  0,
+                  "rgba(255, 255, 255, 0.4)",
+                  1,
+                  "rgba(240, 240, 240, 0.1)",
+                ]}
+                cornerRadius={8}
+                shadowColor="black"
+                shadowBlur={20}
+                shadowOffsetY={8}
+                shadowOpacity={0.1}
               />
 
               <Shape
@@ -493,6 +564,49 @@ export default function FlipCard() {
                 stroke="#333333"
                 strokeWidth={1}
               />
+              <Shape
+                sceneFunc={(ctx, shape) => {
+                  const r = 8;
+                  ctx.beginPath();
+                  ctx.moveTo(CARD_WIDTH - r, CARD_HEIGHT);
+                  ctx.quadraticCurveTo(
+                    CARD_WIDTH,
+                    CARD_HEIGHT,
+                    CARD_WIDTH,
+                    CARD_HEIGHT - r
+                  );
+                  ctx.lineTo(CARD_WIDTH, r);
+                  ctx.quadraticCurveTo(CARD_WIDTH, 0, CARD_WIDTH - r, 0);
+                  ctx.lineTo(CARD_WIDTH / 2 + r, CARD_HEIGHT / 2 - r);
+                  ctx.quadraticCurveTo(
+                    CARD_WIDTH / 2,
+                    CARD_HEIGHT / 2,
+                    CARD_WIDTH / 2,
+                    CARD_HEIGHT / 2 + r
+                  );
+                  ctx.lineTo(CARD_WIDTH - r, CARD_HEIGHT - r);
+                  ctx.quadraticCurveTo(
+                    CARD_WIDTH,
+                    CARD_HEIGHT - r,
+                    CARD_WIDTH - r,
+                    CARD_HEIGHT
+                  );
+                  ctx.closePath();
+                  ctx.fillStrokeShape(shape);
+                }}
+                fillLinearGradientStartPoint={{ x: 0, y: 0 }}
+                fillLinearGradientEndPoint={{ x: CARD_WIDTH, y: CARD_HEIGHT }}
+                fillLinearGradientColorStops={[
+                  0,
+                  "rgba(255, 255, 255, 0.4)",
+                  1,
+                  "rgba(240, 240, 240, 0.1)",
+                ]}
+                shadowColor="black"
+                shadowBlur={20}
+                shadowOffsetY={8}
+                shadowOpacity={0.1}
+              />
 
               <Shape
                 ref={flapBottomRef as React.RefObject<Konva.Shape>}
@@ -537,51 +651,134 @@ export default function FlipCard() {
                 stroke="#333333"
                 strokeWidth={1}
               />
-
-              {/* Flap that opens */}
               <Shape
-                ref={flapRef as React.RefObject<Konva.Shape>}
-                sceneFunc={(context, shape) => {
-                  const cornerRadius = 8;
-
-                  context.beginPath();
-                  context.moveTo(cornerRadius, 0);
-                  context.lineTo(CARD_WIDTH - cornerRadius, 0);
-                  context.quadraticCurveTo(
+                sceneFunc={(ctx, shape) => {
+                  const r = 8;
+                  ctx.beginPath();
+                  ctx.moveTo(r, CARD_HEIGHT);
+                  ctx.lineTo(CARD_WIDTH - r, CARD_HEIGHT);
+                  ctx.quadraticCurveTo(
                     CARD_WIDTH,
-                    0,
-                    CARD_WIDTH - cornerRadius,
-                    cornerRadius
+                    CARD_HEIGHT,
+                    CARD_WIDTH - r,
+                    CARD_HEIGHT - r
                   );
-
-                  context.lineTo(
-                    CARD_WIDTH / 2 + cornerRadius,
-                    CARD_HEIGHT / 2 - cornerRadius
-                  );
-
-                  context.quadraticCurveTo(
+                  ctx.lineTo(CARD_WIDTH / 2 + r, CARD_HEIGHT / 2 + r);
+                  ctx.quadraticCurveTo(
                     CARD_WIDTH / 2,
                     CARD_HEIGHT / 2,
-                    CARD_WIDTH / 2 - cornerRadius,
-                    CARD_HEIGHT / 2 - cornerRadius
+                    CARD_WIDTH / 2 - r,
+                    CARD_HEIGHT / 2 + r
                   );
-
-                  context.lineTo(cornerRadius, cornerRadius);
-
-                  context.quadraticCurveTo(0, 0, cornerRadius, 0);
-
-                  context.closePath();
-                  context.fillStrokeShape(shape);
+                  ctx.lineTo(r, CARD_HEIGHT - r);
+                  ctx.quadraticCurveTo(0, CARD_HEIGHT, r, CARD_HEIGHT);
+                  ctx.closePath();
+                  ctx.fillStrokeShape(shape);
                 }}
-                fill="#121212"
-                stroke="#333333"
-                strokeWidth={2}
-                transformsEnabled="all"
+                fillLinearGradientStartPoint={{ x: 0, y: 0 }}
+                fillLinearGradientEndPoint={{ x: CARD_WIDTH, y: CARD_HEIGHT }}
+                fillLinearGradientColorStops={[
+                  0,
+                  "rgba(255, 255, 255, 0.4)",
+                  1,
+                  "rgba(240, 240, 240, 0.1)",
+                ]}
+                shadowColor="black"
+                shadowBlur={20}
+                shadowOffsetY={8}
+                shadowOpacity={0.1}
+              />
+
+              {/* Flap that opens */}
+              <Group
+                ref={flapGroupRef}
                 x={CARD_WIDTH / 2}
                 y={0}
                 offsetX={CARD_WIDTH / 2}
                 offsetY={0}
-              />
+              >
+                <Shape
+                  ref={flapRef as React.RefObject<Konva.Shape>}
+                  sceneFunc={(context, shape) => {
+                    const cornerRadius = 8;
+
+                    context.beginPath();
+                    context.moveTo(cornerRadius, 0);
+                    context.lineTo(CARD_WIDTH - cornerRadius, 0);
+                    context.quadraticCurveTo(
+                      CARD_WIDTH,
+                      0,
+                      CARD_WIDTH - cornerRadius,
+                      cornerRadius
+                    );
+
+                    context.lineTo(
+                      CARD_WIDTH / 2 + cornerRadius,
+                      CARD_HEIGHT / 2 - cornerRadius
+                    );
+
+                    context.quadraticCurveTo(
+                      CARD_WIDTH / 2,
+                      CARD_HEIGHT / 2,
+                      CARD_WIDTH / 2 - cornerRadius,
+                      CARD_HEIGHT / 2 - cornerRadius
+                    );
+
+                    context.lineTo(cornerRadius, cornerRadius);
+
+                    context.quadraticCurveTo(0, 0, cornerRadius, 0);
+
+                    context.closePath();
+                    context.fillStrokeShape(shape);
+                  }}
+                  fill="#121212"
+                  stroke="#333333"
+                  strokeWidth={2}
+                  transformsEnabled="all"
+                  x={CARD_WIDTH / 2}
+                  y={0}
+                  offsetX={CARD_WIDTH / 2}
+                  offsetY={0}
+                />
+                <Shape
+                  ref={flapOverlayRef as React.RefObject<Konva.Shape>}
+                  sceneFunc={(ctx, shape) => {
+                    const r = 8;
+                    ctx.beginPath();
+                    ctx.moveTo(r, 0);
+                    ctx.lineTo(CARD_WIDTH - r, 0);
+                    ctx.quadraticCurveTo(CARD_WIDTH, 0, CARD_WIDTH - r, r);
+                    ctx.lineTo(CARD_WIDTH / 2 + r, CARD_HEIGHT / 2 - r);
+                    ctx.quadraticCurveTo(
+                      CARD_WIDTH / 2,
+                      CARD_HEIGHT / 2,
+                      CARD_WIDTH / 2 - r,
+                      CARD_HEIGHT / 2 - r
+                    );
+                    ctx.lineTo(r, r);
+                    ctx.quadraticCurveTo(0, 0, r, 0);
+                    ctx.closePath();
+                    ctx.fillStrokeShape(shape);
+                  }}
+                  fillLinearGradientStartPoint={{ x: 0, y: 0 }}
+                  fillLinearGradientEndPoint={{ x: CARD_WIDTH, y: CARD_HEIGHT }}
+                  fillLinearGradientColorStops={[
+                    0,
+                    "rgba(255, 255, 255, 0.4)",
+                    1,
+                    "rgba(240, 240, 240, 0.1)",
+                  ]}
+                  shadowColor="black"
+                  shadowBlur={20}
+                  shadowOffsetY={8}
+                  shadowOpacity={0.1}
+                  transformsEnabled="all"
+                  x={CARD_WIDTH / 2}
+                  y={0}
+                  offsetX={CARD_WIDTH / 2}
+                  offsetY={0}
+                />
+              </Group>
 
               {/* Wax seal */}
               <Group x={CARD_WIDTH / 2} y={CARD_HEIGHT * 0.5}>
@@ -607,25 +804,6 @@ export default function FlipCard() {
               </Group>
             </>
           )}
-
-          {/* Shadow and lighting */}
-          <Rect
-            width={CARD_WIDTH}
-            height={CARD_HEIGHT}
-            fillLinearGradientStartPoint={{ x: 0, y: 0 }}
-            fillLinearGradientEndPoint={{ x: CARD_WIDTH, y: CARD_HEIGHT }}
-            fillLinearGradientColorStops={[
-              0,
-              "rgba(255, 255, 255, 0.4)",
-              1,
-              "rgba(240, 240, 240, 0.1)",
-            ]}
-            cornerRadius={8}
-            shadowColor="black"
-            shadowBlur={20}
-            shadowOffsetY={8}
-            shadowOpacity={0.1}
-          />
         </Group>
       </Layer>
     </Stage>
