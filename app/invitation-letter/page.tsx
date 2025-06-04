@@ -1,27 +1,43 @@
-'use client';
+"use client";
 
-import React, { useRef, useState } from 'react';
-import 'client-only';
-import { Stage, Layer, Group, Rect, Text, Line, Shape, Circle } from 'react-konva';
-import Konva from 'konva';
+import React, { useRef, useState, useEffect } from "react";
+import "client-only";
+import {
+  Stage,
+  Layer,
+  Group,
+  Rect,
+  Text,
+  Line,
+  Shape,
+  Circle,
+} from "react-konva";
+import Konva from "konva";
 
 const CARD_WIDTH = 800;
 const CARD_HEIGHT = 500;
+const LETTER_HEIGHT = 320;
 
 export default function FlipCard() {
   const groupRef = useRef<Konva.Group>(null);
   const flapRef = useRef<Konva.Shape>(null);
+  const flapLeftRef = useRef<Konva.Shape>(null);
+  const flapRightRef = useRef<Konva.Shape>(null);
+  const flapBottomRef = useRef<Konva.Shape>(null);
+  const letterRef = useRef<Konva.Group>(null);
   const [isFront, setIsFront] = useState(true);
   const [isFlipping, setIsFlipping] = useState(false);
   const [isFlapOpen, setIsFlapOpen] = useState(false);
-
+  const [windowSize, setWindowSize] = useState({
+    width: 800,
+    height: 600,
+  });
   const handleClick = () => {
     if (isFlipping || !groupRef.current) return;
-    
-    // If on front side, flip the envelope
+
     if (isFront) {
       setIsFlipping(true);
-      
+
       const flipOut = new Konva.Tween({
         node: groupRef.current,
         scaleX: 0,
@@ -29,7 +45,7 @@ export default function FlipCard() {
         easing: Konva.Easings.EaseInOut,
         onFinish: () => {
           setIsFront(false);
-          
+
           const flipIn = new Konva.Tween({
             node: groupRef.current!,
             scaleX: 1,
@@ -42,24 +58,22 @@ export default function FlipCard() {
           flipIn.play();
         },
       });
-      
+
       flipOut.play();
-    } 
-    // If on back side, animate the flap
-    else if (!isFlapOpen && flapRef.current) {
+    } else if (!isFlapOpen && flapRef.current) {
       animateFlap();
-    }
-    // If flap is open, flip back to front
-    else {
+      setTimeout(() => {
+        handleLetterFly();
+      }, 1500);
+    } else {
       setIsFlipping(true);
-      
-      // Reset flap position for next time we see the back
+
       if (flapRef.current) {
-        flapRef.current.scaleY(1); // Reset the flip
-        flapRef.current.y(0);      // Reset the y position
+        flapRef.current.scaleY(1);
+        flapRef.current.y(0);
       }
       setIsFlapOpen(false);
-      
+
       const flipOut = new Konva.Tween({
         node: groupRef.current,
         scaleX: 0,
@@ -67,7 +81,7 @@ export default function FlipCard() {
         easing: Konva.Easings.EaseInOut,
         onFinish: () => {
           setIsFront(true);
-          
+
           const flipIn = new Konva.Tween({
             node: groupRef.current!,
             scaleX: 1,
@@ -80,21 +94,21 @@ export default function FlipCard() {
           flipIn.play();
         },
       });
-      
+
       flipOut.play();
     }
   };
-  
+
   const animateFlap = () => {
     if (!flapRef.current || isFlipping) return;
-    
+
     setIsFlipping(true);
-    
-    // Animate the flap opening with a flip (using scaleY)
+
+    // Open flap to see the letter
     const openFlap = new Konva.Tween({
       node: flapRef.current,
-      scaleY: -1, // Flip the triangle vertically
-      y: CARD_HEIGHT * 0, // Move down to compensate for the flip
+      scaleY: -1,
+      y: CARD_HEIGHT * 0,
       duration: 0.8,
       easing: Konva.Easings.EaseInOut,
       onFinish: () => {
@@ -102,15 +116,92 @@ export default function FlipCard() {
         setIsFlipping(false);
       },
     });
-    
+
     openFlap.play();
   };
 
-  const centerX = typeof window !== 'undefined' ? window.innerWidth / 2 : 400;
-  const centerY = typeof window !== 'undefined' ? window.innerHeight / 2 : 300;
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const centerX = windowSize.width / 2;
+  const centerY = windowSize.height / 2;
+
+  const handleLetterFly = () => {
+    if (!letterRef.current || !groupRef.current) return;
+    flapRef.current?.moveToBottom();
+    const letter = letterRef.current;
+    const envelope = groupRef.current;
+    const originalY = letter.y();
+    const targetY = originalY - LETTER_HEIGHT - 100;
+    const finalY = windowSize.height - LETTER_HEIGHT - 100;
+    const letterOriginalX = letter.x();
+    const envelopeOriginalX = envelope.x();
+
+    const flyUp = new Konva.Tween({
+      node: letter,
+      y: targetY,
+      duration: 0.8,
+      easing: Konva.Easings.EaseInOut,
+      onFinish: () => {
+        const rotateAnimation = new Konva.Tween({
+          node: letter,
+          rotation: 90,
+          duration: 0.5,
+          easing: Konva.Easings.EaseInOut,
+          onFinish: () => {
+            const flyDown = new Konva.Tween({
+              node: letter,
+              y: finalY,
+              duration: 0.8,
+              easing: Konva.Easings.EaseInOut,
+              onFinish: () => {
+                const scaleDownLetter = new Konva.Tween({
+                  node: letter,
+                  scaleX: 0.9,
+                  scaleY: 0.9,
+                  x: letterOriginalX + 300,
+                  y: finalY - 100,
+                  duration: 0.6,
+                  easing: Konva.Easings.EaseInOut,
+                });
+
+                const scaleDownEnvelope = new Konva.Tween({
+                  node: envelope,
+                  scaleX: 0.8,
+                  scaleY: 0.8,
+                  x: envelopeOriginalX - 100,
+                  duration: 0.6,
+                  easing: Konva.Easings.EaseInOut,
+                });
+
+                scaleDownLetter.play();
+                scaleDownEnvelope.play();
+              },
+            });
+            letter.moveToTop();
+            flyDown.play();
+          },
+        });
+
+        rotateAnimation.play();
+      },
+    });
+
+    flyUp.play();
+  };
 
   return (
-    <Stage width={window.innerWidth} height={window.innerHeight}>
+    <Stage width={windowSize.width} height={windowSize.height}>
       <Layer>
         <Group
           x={centerX}
@@ -125,18 +216,17 @@ export default function FlipCard() {
           <Rect
             width={CARD_WIDTH}
             height={CARD_HEIGHT}
-            fill="#FFFFFF"
+            fill="#121212"
             cornerRadius={8}
             shadowColor="black"
             shadowBlur={15}
             shadowOffsetY={5}
             shadowOpacity={0.2}
           />
-          
+
           {isFront ? (
-            // Front of envelope (clean white with stamp)
             <>
-              {/* Postage Stamp */}
+              {/* Stamp */}
               <Group x={CARD_WIDTH - 100} y={75}>
                 <Rect
                   width={70}
@@ -156,12 +246,7 @@ export default function FlipCard() {
                   stroke="#DDD"
                   strokeWidth={0.5}
                 />
-                <Circle
-                  radius={18}
-                  x={25}
-                  y={20}
-                  fill="#DDD"
-                />
+                <Circle radius={18} x={25} y={20} fill="#DDD" />
                 <Rect
                   width={30}
                   height={25}
@@ -172,7 +257,7 @@ export default function FlipCard() {
                   strokeWidth={0.5}
                 />
               </Group>
-              
+
               {/* Postmark */}
               <Group x={CARD_WIDTH - 150} y={75}>
                 <Circle
@@ -194,13 +279,13 @@ export default function FlipCard() {
                   opacity={0.4}
                 />
               </Group>
-              
-              {/* Wedding Invitation text */}
+
+              {/* Wedding Invitation */}
               <Text
                 text="Wedding Invitation"
                 fontSize={32}
                 fontFamily="'Times New Roman', serif"
-                fill="#333333"
+                fill="#f7ecd5" /* Match letter color for consistency */
                 width={CARD_WIDTH}
                 height={CARD_HEIGHT}
                 align="center"
@@ -208,36 +293,288 @@ export default function FlipCard() {
               />
             </>
           ) : (
-            // Back of envelope with flap and seal
             <>
-              {/* Envelope top flap */}
+              {/* Back of envelope */}
+              <Rect
+                width={CARD_WIDTH}
+                height={CARD_HEIGHT}
+                fill="#121212"
+                cornerRadius={8}
+              />
+
+              {/* Letter inside the envelope */}
+              <Group
+                ref={letterRef as React.RefObject<Konva.Group>}
+                x={CARD_WIDTH / 2}
+                y={CARD_HEIGHT / 2.5}
+                offsetX={CARD_WIDTH / 2 - 20}
+                offsetY={LETTER_HEIGHT / 2}
+              >
+                <Rect
+                  width={CARD_WIDTH - 40}
+                  height={LETTER_HEIGHT}
+                  fill="#f7ecd5"
+                  cornerRadius={4}
+                  shadowColor="black"
+                  shadowBlur={5}
+                  shadowOffsetY={2}
+                  shadowOpacity={0.2}
+                />
+
+                <Group
+                  x={(CARD_WIDTH - 40) / 2}
+                  y={LETTER_HEIGHT / 2}
+                  rotation={-90}
+                  offsetX={(CARD_WIDTH - 40) / 2}
+                  offsetY={LETTER_HEIGHT / 2}
+                >
+                  <Text
+                    text="Wedding Invitation"
+                    fontSize={28}
+                    fontFamily="'Times New Roman', serif"
+                    fill="#ac182b"
+                    width={CARD_WIDTH - 60}
+                    height={40}
+                    align="center"
+                    y={20}
+                    x={10}
+                  />
+
+                  <Text
+                    text="Dear Guest,"
+                    fontSize={18}
+                    fontFamily="Arial"
+                    fill="#000000"
+                    width={CARD_WIDTH - 60}
+                    align="center"
+                    y={70}
+                    x={10}
+                  />
+
+                  <Text
+                    text="Join us for our wedding celebration"
+                    fontSize={16}
+                    fontFamily="Arial"
+                    fill="#000000"
+                    width={CARD_WIDTH - 60}
+                    align="center"
+                    y={110}
+                    x={20}
+                  />
+
+                  <Text
+                    text="Saturday, 28th September 2024"
+                    fontSize={16}
+                    fontFamily="Arial"
+                    fill="#000000"
+                    width={CARD_WIDTH - 80}
+                    align="center"
+                    y={150}
+                    x={20}
+                  />
+
+                  <Text
+                    text="The Grand Ballroom"
+                    fontSize={16}
+                    fontFamily="Arial"
+                    fill="#000000"
+                    width={CARD_WIDTH - 80}
+                    align="center"
+                    y={180}
+                    x={20}
+                  />
+
+                  <Text
+                    text="RSVP by August 1st, 2024"
+                    fontSize={16}
+                    fontStyle="italic"
+                    fontFamily="Arial"
+                    fill="#000000"
+                    width={CARD_WIDTH - 80}
+                    align="center"
+                    y={230}
+                    x={20}
+                  />
+                </Group>
+              </Group>
+
+              {/* Envelope flap and other details */}
               <Shape
+                ref={flapLeftRef as React.RefObject<Konva.Shape>}
                 sceneFunc={(context, shape) => {
+                  const cornerRadius = 8;
+
                   context.beginPath();
-                  context.moveTo(0, CARD_HEIGHT * 0);
-                  context.lineTo(CARD_WIDTH / 2, 250); // Top point of flap
-                  context.lineTo(CARD_WIDTH, CARD_HEIGHT * 0);
+                  context.moveTo(cornerRadius, CARD_HEIGHT);
+                  context.quadraticCurveTo(
+                    0,
+                    CARD_HEIGHT,
+                    0,
+                    CARD_HEIGHT - cornerRadius
+                  );
+                  context.lineTo(0, cornerRadius);
+                  context.quadraticCurveTo(0, 0, cornerRadius, 0);
+                  context.lineTo(
+                    CARD_WIDTH / 2 - cornerRadius,
+                    CARD_HEIGHT / 2 - cornerRadius
+                  );
+                  context.quadraticCurveTo(
+                    CARD_WIDTH / 2,
+                    CARD_HEIGHT / 2,
+                    CARD_WIDTH / 2,
+                    CARD_HEIGHT / 2 + cornerRadius
+                  );
+
+                  context.lineTo(cornerRadius, CARD_HEIGHT - cornerRadius);
+                  context.quadraticCurveTo(
+                    0,
+                    CARD_HEIGHT - cornerRadius,
+                    cornerRadius,
+                    CARD_HEIGHT
+                  );
+
                   context.closePath();
                   context.fillStrokeShape(shape);
                 }}
-                fill="#000000" 
-                stroke="#000000"
-                strokeWidth={2}
+                fill="#121212"
+                stroke="#333333"
+                strokeWidth={1}
               />
-              
-              {/* Triangular flap (combined diagonal lines as a shape) */}
+
+              <Shape
+                ref={flapRightRef as React.RefObject<Konva.Shape>}
+                sceneFunc={(context, shape) => {
+                  const cornerRadius = 8;
+
+                  context.beginPath();
+                  context.moveTo(CARD_WIDTH - cornerRadius, CARD_HEIGHT);
+                  context.quadraticCurveTo(
+                    CARD_WIDTH,
+                    CARD_HEIGHT,
+                    CARD_WIDTH,
+                    CARD_HEIGHT - cornerRadius
+                  );
+
+                  context.lineTo(CARD_WIDTH, cornerRadius);
+                  context.quadraticCurveTo(
+                    CARD_WIDTH,
+                    0,
+                    CARD_WIDTH - cornerRadius,
+                    0
+                  );
+
+                  context.lineTo(
+                    CARD_WIDTH / 2 + cornerRadius,
+                    CARD_HEIGHT / 2 - cornerRadius
+                  );
+
+                  context.quadraticCurveTo(
+                    CARD_WIDTH / 2,
+                    CARD_HEIGHT / 2,
+                    CARD_WIDTH / 2,
+                    CARD_HEIGHT / 2 + cornerRadius
+                  );
+
+                  context.lineTo(
+                    CARD_WIDTH - cornerRadius,
+                    CARD_HEIGHT - cornerRadius
+                  );
+                  context.quadraticCurveTo(
+                    CARD_WIDTH,
+                    CARD_HEIGHT - cornerRadius,
+                    CARD_WIDTH - cornerRadius,
+                    CARD_HEIGHT
+                  );
+
+                  context.closePath();
+                  context.fillStrokeShape(shape);
+                }}
+                fill="#121212"
+                stroke="#333333"
+                strokeWidth={1}
+              />
+
+              <Shape
+                ref={flapBottomRef as React.RefObject<Konva.Shape>}
+                sceneFunc={(context, shape) => {
+                  const cornerRadius = 8;
+
+                  context.beginPath();
+                  context.moveTo(cornerRadius, CARD_HEIGHT);
+                  context.lineTo(CARD_WIDTH - cornerRadius, CARD_HEIGHT);
+                  context.quadraticCurveTo(
+                    CARD_WIDTH,
+                    CARD_HEIGHT,
+                    CARD_WIDTH - cornerRadius,
+                    CARD_HEIGHT - cornerRadius
+                  );
+
+                  context.lineTo(
+                    CARD_WIDTH / 2 + cornerRadius,
+                    CARD_HEIGHT / 2 + cornerRadius
+                  );
+
+                  context.quadraticCurveTo(
+                    CARD_WIDTH / 2,
+                    CARD_HEIGHT / 2,
+                    CARD_WIDTH / 2 - cornerRadius,
+                    CARD_HEIGHT / 2 + cornerRadius
+                  );
+
+                  context.lineTo(cornerRadius, CARD_HEIGHT - cornerRadius);
+
+                  context.quadraticCurveTo(
+                    0,
+                    CARD_HEIGHT,
+                    cornerRadius,
+                    CARD_HEIGHT
+                  );
+
+                  context.closePath();
+                  context.fillStrokeShape(shape);
+                }}
+                fill="#121212"
+                stroke="#333333"
+                strokeWidth={1}
+              />
+
+              {/* Flap that opens */}
               <Shape
                 ref={flapRef as React.RefObject<Konva.Shape>}
                 sceneFunc={(context, shape) => {
+                  const cornerRadius = 8;
+
                   context.beginPath();
-                  context.moveTo(0, 0);
-                  context.lineTo(CARD_WIDTH / 2, CARD_HEIGHT / 2);
-                  context.lineTo(CARD_WIDTH, 0);
+                  context.moveTo(cornerRadius, 0);
+                  context.lineTo(CARD_WIDTH - cornerRadius, 0);
+                  context.quadraticCurveTo(
+                    CARD_WIDTH,
+                    0,
+                    CARD_WIDTH - cornerRadius,
+                    cornerRadius
+                  );
+
+                  context.lineTo(
+                    CARD_WIDTH / 2 + cornerRadius,
+                    CARD_HEIGHT / 2 - cornerRadius
+                  );
+
+                  context.quadraticCurveTo(
+                    CARD_WIDTH / 2,
+                    CARD_HEIGHT / 2,
+                    CARD_WIDTH / 2 - cornerRadius,
+                    CARD_HEIGHT / 2 - cornerRadius
+                  );
+
+                  context.lineTo(cornerRadius, cornerRadius);
+
+                  context.quadraticCurveTo(0, 0, cornerRadius, 0);
+
                   context.closePath();
                   context.fillStrokeShape(shape);
                 }}
-                fill="#FFFFFF"
-                stroke="#EEEEEE"
+                fill="#121212"
+                stroke="#333333"
                 strokeWidth={2}
                 transformsEnabled="all"
                 x={CARD_WIDTH / 2}
@@ -245,36 +582,18 @@ export default function FlipCard() {
                 offsetX={CARD_WIDTH / 2}
                 offsetY={0}
               />
-              
-              {/* Hidden invitation content */}
-              {/* <Group visible={isFlapOpen}>
-                <Text
-                  text="You're Invited"
-                  fontSize={32}
-                  fontFamily="'Times New Roman', serif"
-                  fill="#333333"
-                  width={CARD_WIDTH}
-                  height={CARD_HEIGHT / 2}
-                  y={CARD_HEIGHT / 4}
-                  align="center"
-                  verticalAlign="middle"
-                />
-              </Group> */}
-              
-              {/* Wax seal (moved to back) */}
+
+              {/* Wax seal */}
               <Group x={CARD_WIDTH / 2} y={CARD_HEIGHT * 0.5}>
                 <Circle
                   radius={30}
-                  fill="#B23A48" // Red wax color
+                  fill="#B23A48"
                   shadowColor="black"
                   shadowBlur={8}
                   shadowOffsetY={2}
                   shadowOpacity={0.3}
                 />
-                <Circle
-                  radius={25}
-                  fill="#C13A48" // Slightly different shade for texture
-                />
+                <Circle radius={25} fill="#C13A48" />
                 <Text
                   text="W&A"
                   fontSize={20}
@@ -286,28 +605,21 @@ export default function FlipCard() {
                   offsetY={10}
                 />
               </Group>
-              
-              {/* Optional: Light text at top */}
-              <Text
-                text="Scott Hyde"
-                fontSize={18}
-                fontFamily="'Times New Roman', serif"
-                fill="#333333"
-                width={CARD_WIDTH}
-                y={CARD_HEIGHT * 0.15}
-                align="center"
-                opacity={0.8}
-              />
             </>
           )}
-          
-          {/* Very subtle shadow and lighting */}
+
+          {/* Shadow and lighting */}
           <Rect
             width={CARD_WIDTH}
             height={CARD_HEIGHT}
             fillLinearGradientStartPoint={{ x: 0, y: 0 }}
             fillLinearGradientEndPoint={{ x: CARD_WIDTH, y: CARD_HEIGHT }}
-            fillLinearGradientColorStops={[0, 'rgba(255, 255, 255, 0.4)', 1, 'rgba(240, 240, 240, 0.1)']}
+            fillLinearGradientColorStops={[
+              0,
+              "rgba(255, 255, 255, 0.4)",
+              1,
+              "rgba(240, 240, 240, 0.1)",
+            ]}
             cornerRadius={8}
             shadowColor="black"
             shadowBlur={20}
